@@ -1,0 +1,75 @@
+Critical [18:56:59] [fail @ main.go.62] Please specify config file path
+Critical [18:57:08] [fail @ main.go.62] Please specify config file path
+Info [18:57:40] [unmarshalConfig @ main.go.39] loading config from %stestcfg.json
+Debug [18:57:40] [unmarshalConfig @ main.go.48] Unmarshalling config
+Error [18:57:40] [unmarshalConfig @ main.go.55] Invalid config: 'Nil length password'
+Critical [18:57:40] [fail @ main.go.62] Sender init failed. 'Invalid config: 'Nil length password''
+Info [18:58:59] [unmarshalConfig @ main.go.39] loading config from %stestcfg.json
+Debug [18:58:59] [unmarshalConfig @ main.go.47] Unmarshalling config
+Critical [18:58:59] [fail @ main.go.61] Sender init failed. 'Invalid config: 'Nil length password''
+Info [18:59:32] [unmarshalConfig @ main.go.39] loading config from %stestcfg.json
+Debug [18:59:32] [unmarshalConfig @ main.go.47] Unmarshalling config{
+    "user": "testuser",
+    "pwd": "123456749ab68522345a7890aad1babc"
+}
+Critical [18:59:32] [fail @ main.go.61] Sender init failed. 'Invalid config: 'Nil length password''
+Info [19:00:25] [unmarshalConfig @ main.go.39] loading config from %stestcfg.json
+Debug [19:00:25] [unmarshalConfig @ main.go.47] Unmarshalling config
+Critical [19:00:25] [fail @ main.go.61] Sender init failed. 'Invalid config: 'Nil length password''
+Info [19:00:43] [unmarshalConfig @ main.go.39] loading config from %stestcfg.json
+Debug [19:00:43] [unmarshalConfig @ main.go.47] Unmarshalling config
+Critical [19:00:43] [fail @ main.go.61] Sender init failed. 'Cannot unmarshal: 'invalid character '}' looking for beginning of object key string''
+Info [19:00:48] [unmarshalConfig @ main.go.39] loading config from %stestcfg.json
+Debug [19:00:48] [unmarshalConfig @ main.go.47] Unmarshalling config
+Critical [19:00:48] [fail @ main.go.61] Sender init failed. 'Invalid config: 'Nil length password''
+Info [19:01:06] [unmarshalConfig @ main.go.39] loading config from %stestcfg.json
+Debug [19:01:06] [unmarshalConfig @ main.go.47] Unmarshalling config
+Critical [19:01:06] [unmarshalConfig @ main.go.52] &{testuser }
+Critical [19:01:06] [fail @ main.go.62] Sender init failed. 'Invalid config: 'Nil length password''
+Info [19:01:45] [unmarshalConfig @ main.go.39] loading config from %stestcfg.json
+Debug [19:01:45] [unmarshalConfig @ main.go.47] Unmarshalling config
+Critical [19:01:45] [main @ main.go.94] %vtoo many colons in address ::5678
+Info [19:02:06] [unmarshalConfig @ main.go.39] loading config from %stestcfg.json
+Debug [19:02:06] [unmarshalConfig @ main.go.47] Unmarshalling config
+Info [19:04:40] [unmarshalConfig @ main.go.40] loading config from testcfg.json
+Debug [19:04:40] [unmarshalConfig @ main.go.48] Unmarshalling config
+Critical [19:04:40] [fail @ main.go.62] rpc: can't find service "SMSService"
+Info [19:05:01] [unmarshalConfig @ main.go.40] loading config from testcfg.json
+Debug [19:05:01] [unmarshalConfig @ main.go.48] Unmarshalling config
+Critical [19:05:01] [fail @ main.go.62] rpc: can't find service ""
+Info [19:05:35] [unmarshalConfig @ main.go.40] loading config from testcfg.json
+Debug [19:05:35] [unmarshalConfig @ main.go.48] Unmarshalling config
+Info [19:05:35] [main @ main.go.103] 
+Methods:
+    Send
+
+Info [19:07:38] [unmarshalConfig @ main.go.40] loading config from testcfg.json
+Debug [19:07:38] [unmarshalConfig @ main.go.48] Unmarshalling config
+Info [19:07:38] [main @ main.go.103] 
+Starting rpc service //rpc on port :5678. 
+Methods:
+    Send
+
+Info [19:07:54] [unmarshalConfig @ main.go.40] loading config from testcfg.json
+Debug [19:07:54] [unmarshalConfig @ main.go.48] Unmarshalling config
+Info [19:07:54] [main @ main.go.103] 
+Starting rpc service /rpc on port :5678. 
+Methods:
+    Send
+
+Info [19:08:11] [unmarshalConfig @ main.go.40] loading config from testcfg.json
+Debug [19:08:11] [unmarshalConfig @ main.go.48] Unmarshalling config
+Info [19:08:11] [main @ main.go.103] 
+Starting service '/rpc' on port ':5678'. 
+Methods:
+    Send
+
+Info [19:09:09] [unmarshalConfig @ main.go.40] loading config from testcfg.json
+Debug [19:09:09] [unmarshalConfig @ main.go.48] Unmarshalling config
+Info [19:09:09] [main @ main.go.103] 
+Starting service '/rpc' on port ':5678'. 
+Methods:
+    Send
+
+Info [19:09:13] [unmarshalConfig @ main.go.40] loading config from smsc.default.json
+Critical [19:09:13] [fail @ main.go.62] Sender init failed. 'open smsc.default.json: no such file or directory'

@@ -37,10 +37,10 @@ func NewSmscRpcServiceClient(address string, retryCount int, retryTimeout time.D
 }
 
 //------------------------------------------------
-// ▢ SendSMS
+// ▢ Send
 //------------------------------------------------
 
-func (client *SmscRpcServiceClient) SendSMS(phone string, text string) (error) {
+func (client *SmscRpcServiceClient) Send(phone string, text string) (error) {
 	args := service.Send_Args{phone, text}
 	var r service.Send_Reply
 

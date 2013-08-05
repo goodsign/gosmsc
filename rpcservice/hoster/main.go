@@ -5,6 +5,7 @@ import (
 	"os"
 	"net/http"
 	"github.com/goodsign/rpc"
+	"github.com/goodsign/gosmsc/rpcservice"
 	gjson "github.com/goodsign/rpc/json"
 	"flag"
 	"io/ioutil"
@@ -87,7 +88,12 @@ func main() {
 
 	s := rpc.NewServer()
 	s.RegisterCodec(gjson.NewCodec(), "application/json")
-	s.RegisterService(&SMSService{sender}, "")
+	if err != nil {
+		fail(ErrorCodeInternalInitError, err.Error())
+	}
+	 
+	serv, err := rpcservice.NewSMSService(sender)
+	s.RegisterService(serv, "")
 
 	http.Handle("/" + *rpcPath, s)
 
@@ -107,30 +113,4 @@ func main() {
 	if err != nil {
 		fail(ErrorCodeInternalInitError, err.Error())
 	}
-}
-
-//Service Definition
-type SMSService struct {
-	sender *gosmsc.Sender
-}
-
-type Send_Args struct {
-	Phone string
-	Text  string
-}
-
-type Send_Reply struct {
-	Message string
-}
-
-func (h *SMSService) Send(r *http.Request, msg *Send_Args, reply *Send_Reply) error {
-	log.Trace("")
-
-	err := h.sender.Send(msg.Phone, msg.Text)
-	if err != nil {
-		reply.Message = err.Error()
-		return err
-	}
-	reply.Message = "OK"
-	return nil
 }

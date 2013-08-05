@@ -44,6 +44,6 @@ func (client *SmscRpcServiceClient) SendSMS(phone string, text string) (error) {
 	args := service.Send_Args{phone, text}
 	var r service.Send_Reply
 
-	e := client.GetResult(SmscRpcServiceName+"SendSMS", &args, &r)
+	e := client.GetResult(SmscRpcServiceName+"Send", &args, &r)
 	return e
 }

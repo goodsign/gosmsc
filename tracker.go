@@ -1,7 +1,6 @@
 package gosmsc
 
 import (
-	"encoding/json"
 	"fmt"
 	. "github.com/goodsign/gosmsc/contract"
 	"sync"
@@ -12,35 +11,41 @@ const (
 	DefaultUpdateInterval = time.Minute
 )
 
-// MessageTracker represents a running goroutine that polls smsc service to track status of sent messages
+// MessageTracker represents a running goroutine that polls SMSC service to track status of sent messages
 // which status is pending. This object is created when a goroutine is started by StartTracking and
 // can be used to stop the goroutine using Close func. After goroutine is stopped by Close() this
 // object cannot be used anymore.
 type MessageTracker struct {
-	stopM       sync.Mutex
-	storage     MessageStatusStorageInterface
-	smsc        SMSCInterface
-	stopped     bool
-	stopChannel chan bool // Used to signal the polling goroutine to stop and finish
+	stopM         sync.Mutex
+	storage       StatusContainer
+	statusFetcher StatusFetcher
+	tickerForTest chan bool // Used to create artificial ticks from tests
+	stopped       bool
+	stopChannel   chan bool // Used to signal the polling goroutine to stop and finish
 }
 
 // StartTracking creates a new tracker for the specified storage and starts the tracking process
-// in a separate goroutine. Uses 'smsc' argument to call the SMSC service when updates for pending
+// in a separate goroutine. Uses 'statusFetcher' argument to call the SMSC service when updates for pending
 // messages are needed.
 // To stop it, call Close on the returned tracker instance.
-func StartTracking(storage MessageStatusStorageInterface, smsc SMSCInterface, updateInterval time.Duration) (tracker *MessageTracker, e error) {
+func StartTracking(storage StatusContainer, statusFetcher StatusFetcher, updateInterval time.Duration) (tracker *MessageTracker, e error) {
+	if updateInterval <= 0 {
+		return nil, fmt.Errorf("updateInterval cannot be zero or negative")
+	}
 	if storage == nil {
 		return nil, fmt.Errorf("Message tracker storage cannot be nil")
 	}
-	if smsc == nil {
-		return nil, fmt.Errorf("Message tracker smsc parameter cannot be nil")
+	if statusFetcher == nil {
+		return nil, fmt.Errorf("Message tracker statusFetcher parameter cannot be nil")
 	}
-	tracker = &MessageTracker{sync.Mutex{}, storage, smsc, false, make(chan bool, 1)}
+	tracker = &MessageTracker{sync.Mutex{}, storage, statusFetcher, make(chan bool), false, make(chan bool, 1)}
 
 	go func(t *MessageTracker) {
 		ticker := time.NewTicker(updateInterval)
-		for !tracker.stopped {
+		for !t.IsStopped() {
 			select {
+			case <-t.tickerForTest:
+				t.checkPending()
 			case <-ticker.C:
 				t.checkPending()
 			case <-t.stopChannel:
@@ -52,7 +57,7 @@ func StartTracking(storage MessageStatusStorageInterface, smsc SMSCInterface, up
 }
 
 // IsStopped returns true if the tracker goroutine was stopped by the Stop func and the tracker is unusable anymore.
-func (t MessageTracker) IsStopped() bool {
+func (t *MessageTracker) IsStopped() bool {
 	t.stopM.Lock()
 	defer t.stopM.Unlock()
 	return t.stopped
@@ -63,7 +68,7 @@ func (t MessageTracker) IsStopped() bool {
 //
 // NOTE 1: Goroutine doesn't terminate immediately (it can be processing pending issues), but
 // Stop func is non blocking itself.
-func (t MessageTracker) Stop() error {
+func (t *MessageTracker) Stop() error {
 	t.stopM.Lock()
 	defer t.stopM.Unlock()
 	if t.stopped {
@@ -71,10 +76,12 @@ func (t MessageTracker) Stop() error {
 	}
 	t.stopped = true
 	t.stopChannel <- true
+	close(t.tickerForTest)
+	close(t.stopChannel)
 	return nil
 }
 
-func (t MessageTracker) checkPending() error {
+func (t *MessageTracker) checkPending() error {
 	pendingMessages, err := t.storage.GetPending()
 	if err != nil {
 		return logger.Error(err)
@@ -82,20 +89,10 @@ func (t MessageTracker) checkPending() error {
 
 	for _, message := range pendingMessages {
 		logger.Debug("Checking message %v", message.MessageId)
-		responseBytes, err := t.smsc.GetStatus(message.MessageId, message.Phone)
+		output, err := t.statusFetcher.FetchStatus(message.MessageId, message.Phone)
 		if err != nil {
 			logger.Error(err)
 			continue
-		}
-
-		output := new(checkStatusResponse)
-		err = json.Unmarshal(responseBytes, &output)
-		if err != nil {
-			return logger.Error(err)
-		}
-
-		if output.Error != "" {
-			return logger.Error(fmt.Errorf("[%v] %s", output.ErrorCode, output.Error))
 		}
 
 		message.StatusCode = MessageStatusCode(output.StatusCode)
@@ -117,15 +114,4 @@ func (t MessageTracker) checkPending() error {
 		}
 	}
 	return nil
-}
-
-// Used to unmarshal sms status response.
-type checkStatusResponse struct {
-	StatusCode      int32  `json:"status"`
-	StatusDate      string `json:"last_date"`
-	Operator        string `json:"operator"`
-	Region          string `json:"region"`
-	StatusErrorCode int32  `json:"err"`
-	Error           string `json:"error"`
-	ErrorCode       int32  `json:"error_code"`
 }

@@ -1,6 +1,7 @@
 package client
 
 import (
+	. "github.com/goodsign/gosmsc/contract"
 	service "github.com/goodsign/gosmsc/rpcservice"
 	"github.com/goodsign/goutils/jsonrpc"
 	"time"
@@ -40,10 +41,28 @@ func NewSmscRpcServiceClient(address string, retryCount int, retryTimeout time.D
 // ▢ Send
 //------------------------------------------------
 
-func (client *SmscRpcServiceClient) Send(phone string, text string) (error) {
-	args := service.Send_Args{phone, text}
+func (client *SmscRpcServiceClient) Send(phone string, text string, track bool) (int64, error) {
+	args := service.Send_Args{phone, text, track}
 	var r service.Send_Reply
 
 	e := client.GetResult(SmscRpcServiceName+"Send", &args, &r)
-	return e
+	if e != nil {
+		return 0, e
+	}
+	return r.Id, nil
+}
+
+//------------------------------------------------
+// ▢ GetActualStatus
+//------------------------------------------------
+
+func (client *SmscRpcServiceClient) GetActualStatus(id int64) (*MessageStatus, error) {
+	args := service.GetActualStatus_Args{id}
+	var r service.GetActualStatus_Reply
+
+	e := client.GetResult(SmscRpcServiceName+"GetActualStatus", &args, &r)
+	if e != nil {
+		return nil, e
+	}
+	return r.Status, nil
 }

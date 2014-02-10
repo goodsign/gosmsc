@@ -9,6 +9,7 @@ type MessageStatusCode int32
 
 const (
 	MessageStatusCodeUnknown = -999
+	MessageStatusJustSent    = -2
 	MessageStatusComplete    = 1
 )
 
@@ -31,4 +32,23 @@ type MessageStatus struct {
 // but which code was not retrieved yet.
 func NewUnknownMessageStatus(messageId int64, phone string) *MessageStatus {
 	return &MessageStatus{messageId, phone, time.Now(), time.Now(), MessageStatusCodeUnknown, "", "", 0}
+}
+
+// CheckStatusResponse is used to unmarshal server response for status checking request.
+type CheckStatusResponse struct {
+	StatusCode      int32  `json:"status"`
+	StatusDate      string `json:"last_date"`
+	Operator        string `json:"operator"`
+	Region          string `json:"region"`
+	StatusErrorCode int32  `json:"err"`
+	Error           string `json:"error"`
+	ErrorCode       int32  `json:"error_code"`
+}
+
+// SendSMSResponse is used to unmarshal the response from server on the 'send sms' action.
+// See SmscClient.Send.
+type SendSMSResponse struct {
+	Error     string `json:"error"`
+	ErrorCode int32  `json:"error_code"`
+	Id        int64  `json:"id"`
 }

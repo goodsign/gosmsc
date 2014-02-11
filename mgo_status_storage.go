@@ -28,7 +28,7 @@ func NewMessageStatusMgoStorage(dbHelper *mgohelper.DbHelper) (*MessageStatusMgo
 }
 
 func (ms *MessageStatusMgoStorage) Get(messageId int64) (*MessageStatus, error) {
-	logger.Trace("messageId: '%d'", messageId)
+	logger.Tracef("messageId: '%d'", messageId)
 	c, s := ms.h.C(messagesCollection)
 	defer s.Close()
 
@@ -48,7 +48,7 @@ func (ms *MessageStatusMgoStorage) Put(message *MessageStatus) error {
 	if message == nil {
 		return logger.Errorf("message is nil")
 	}
-	logger.Trace("message id: '%d'", message.MessageId)
+	logger.Tracef("message id: '%d'", message.MessageId)
 
 	c, s := ms.h.C(messagesCollection)
 	defer s.Close()
@@ -63,7 +63,7 @@ func (ms *MessageStatusMgoStorage) GetPending() ([]MessageStatus, error) {
 	defer s.Close()
 
 	var messages []MessageStatus
-	err := c.Find(bson.M{"status": bson.M{"$ne": MessageStatusComplete}, "statuserrorcode": 0}).All(&messages)
+	err := c.Find(bson.M{"statuscode": bson.M{"$ne": MessageStatusComplete}, "statuserrorcode": 0}).All(&messages)
 	if err != nil {
 		return nil, logger.Error(err)
 	}

@@ -88,7 +88,7 @@ func (t *MessageTracker) checkPending() error {
 	}
 
 	for _, message := range pendingMessages {
-		logger.Debug("Checking message %v", message.MessageId)
+		logger.Debugf("Checking message %v", message.MessageId)
 		output, err := t.statusFetcher.FetchStatus(message.MessageId, message.Phone)
 		if err != nil {
 			logger.Error(err)

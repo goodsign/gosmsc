@@ -33,6 +33,7 @@ func (c *smsClientInternal) get(path string) ([]byte, error) {
 	defer resp.Body.Close()
 
 	respBytes, err := ioutil.ReadAll(resp.Body)
+	logger.Debugf("Server response:\n %s", string(respBytes))
 	if err != nil {
 		return nil, logger.Error(err)
 	}
@@ -40,7 +41,7 @@ func (c *smsClientInternal) get(path string) ([]byte, error) {
 }
 
 func (c *smsClientInternal) Send(phone string, text string) (*SendSMSResponse, error) {
-	respBytes, err := c.get(fmt.Sprintf("sys/send.php?login=%s&psw=%s&charset=utf-8&phones=%s&mes=%s",
+	respBytes, err := c.get(fmt.Sprintf("sys/send.php?login=%s&psw=%s&charset=utf-8&phones=%s&mes=%s&fmt=3",
 		c.opts.User, c.opts.Password, phone, text))
 	if err != nil {
 		return nil, logger.Error(err)

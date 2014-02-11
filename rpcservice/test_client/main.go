@@ -31,11 +31,22 @@ func main() {
 		log.Flush()
 		os.Exit(-1)
 	}
-	id, err := c.Send("+79213400427", "test", false)
+	id, err := c.Send("+79211234567", "test", true)
 	if err != nil {
 		log.Critical(err)
 		log.Flush()
 		os.Exit(-1)
 	}
 	log.Infof("Id: '%d'\n", id)
+
+	for i := 0; i < 100; i++ {
+		time.Sleep(time.Second)
+		st, err := c.GetActualStatus(id)
+		if err != nil {
+			log.Error(err)
+		} else {
+			log.Infof("Status: '%d'", st.StatusCode)
+		}
+	}
+
 }

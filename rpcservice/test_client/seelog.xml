@@ -1,0 +1,24 @@
+<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="trace">
+    <outputs formatid="other">
+        <file path="log.log" formatid="noesc"/>
+        <filter levels="info" formatid="info">
+          <console/>
+        </filter>
+        <filter levels="warn" formatid="warn">
+          <console/>
+        </filter>
+        <filter levels="error,critical" formatid="error">
+          <console/>
+        </filter>
+        <filter levels="trace,debug" formatid="other">
+          <console/>
+        </filter>
+    </outputs>
+    <formats>
+        <format id="info"  format="%EscM(46)%Level%EscM(49) %EscM(34)[%Time]%EscM(39) %EscM(36)[%FuncShort @ %File.%Line]%EscM(39) %Msg%n%EscM(0)"/>
+        <format id="warn"  format="%EscM(43)%Level%EscM(49) %EscM(43)[%Time]%EscM(49) %EscM(43)[%FuncShort @ %File.%Line]%EscM(49) %EscM(33)%Msg%n%EscM(0)"/>
+        <format id="error"  format="%EscM(41)%Level%EscM(49) %EscM(41)[%Time]%EscM(49) %EscM(41)[%FuncShort @ %File.%Line]%EscM(49) %EscM(31)%Msg%n%EscM(0)"/>
+        <format id="other"  format="%EscM(32)%Level%EscM(39) %EscM(34)[%Time]%EscM(39) %EscM(36)[%FuncShort @ %File.%Line]%EscM(39) %Msg%n%EscM(0)"/>
+        <format id="noesc"  format="%Level [%Time] [%FuncShort @ %File.%Line] %Msg%n"/>
+    </formats>
+</seelog>

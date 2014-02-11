@@ -1,0 +1,29 @@
+Debug [10:27:24] [GetResult @ retry.go.76] JSON-RPC Client call: 'SMSService.Send'
+Trace [10:27:24] [GetResult @ retry.go.87] Post request to 'http://localhost:5678/rpc'
+Error [10:27:25] [doRetry @ retry.go.50] Error while decoding '{"result":null,"error":"invalid character 'E' looking for beginning of value","id":5577006791947779410}
+' :'invalid character 'E' looking for beginning of value'
+Error [10:27:25] [GetResult @ retry.go.93] invalid character 'E' looking for beginning of value
+Critical [10:27:25] [main @ main.go.36] invalid character 'E' looking for beginning of value
+Debug [10:28:02] [GetResult @ retry.go.76] JSON-RPC Client call: 'SMSService.Send2'
+Trace [10:28:02] [GetResult @ retry.go.87] Post request to 'http://localhost:5678/rpc'
+Error [10:28:02] [doRetry @ retry.go.50] Error while decoding 'rpc: can't find method "SMSService.Send2"' :'invalid character 'r' looking for beginning of value'
+Error [10:28:02] [GetResult @ retry.go.93] invalid character 'r' looking for beginning of value
+Critical [10:28:02] [main @ main.go.36] invalid character 'r' looking for beginning of value
+Debug [10:28:30] [GetResult @ retry.go.76] JSON-RPC Client call: 'SMSService.Send'
+Trace [10:28:30] [GetResult @ retry.go.87] Post request to 'http://localhost:5678/rpc'
+Error [10:28:30] [doRetry @ retry.go.50] Error while decoding '{"result":null,"error":"invalid character 'E' looking for beginning of value","id":5577006791947779410}
+' :'invalid character 'E' looking for beginning of value'
+Error [10:28:30] [GetResult @ retry.go.93] invalid character 'E' looking for beginning of value
+Critical [10:28:30] [main @ main.go.36] invalid character 'E' looking for beginning of value
+Debug [10:31:33] [GetResult @ retry.go.76] JSON-RPC Client call: 'SMSService.Send'
+Trace [10:31:33] [GetResult @ retry.go.87] Post request to 'http://localhost:5678/rpc'
+Error [10:31:34] [doRetry @ retry.go.50] Error while decoding '{"result":null,"error":"invalid character 'E' looking for beginning of value","id":5577006791947779410}
+' :'invalid character 'E' looking for beginning of value'
+Error [10:31:34] [GetResult @ retry.go.93] invalid character 'E' looking for beginning of value
+Critical [10:31:34] [main @ main.go.36] invalid character 'E' looking for beginning of value
+Debug [10:40:20] [GetResult @ retry.go.76] JSON-RPC Client call: 'SMSService.Send'
+Trace [10:40:20] [GetResult @ retry.go.87] Post request to 'http://localhost:5678/rpc'
+Error [10:40:20] [doRetry @ retry.go.50] Error while decoding '{"result":null,"error":"invalid character 'O' looking for beginning of value","id":5577006791947779410}
+' :'invalid character 'O' looking for beginning of value'
+Error [10:40:20] [GetResult @ retry.go.93] invalid character 'O' looking for beginning of value
+Critical [10:40:20] [main @ main.go.36] invalid character 'O' looking for beginning of value

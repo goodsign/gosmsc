@@ -24,7 +24,9 @@ func newSmsClientInternal(opts *SmscClientOptions) (*smsClientInternal, error) {
 }
 
 func (c *smsClientInternal) get(path string) ([]byte, error) {
-	resp, err := http.Get(fmt.Sprintf("https://smsc.ru/%s", path))
+	getPath := fmt.Sprintf("https://smsc.ru/%s", path)
+	logger.Infof("GET: '%s'", getPath)
+	resp, err := http.Get(getPath)
 	if err != nil {
 		return nil, logger.Error(err)
 	}

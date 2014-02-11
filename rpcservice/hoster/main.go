@@ -14,7 +14,9 @@ import (
 	lmgo "labix.org/v2/mgo"
 	"net/http"
 	"os"
+	"os/signal"
 	"strconv"
+	"syscall"
 	"time"
 )
 
@@ -24,7 +26,8 @@ const (
 	ErrorCodeInternalInitError = -3
 	ConnectTimeout             = 5 * time.Minute
 
-	SeelogCfg = "seelog.xml"
+	SeelogCfg   = "seelog.xml"
+	pidFileName = "sms-service.pid"
 )
 
 var (
@@ -142,8 +145,40 @@ func main() {
 	log.Info(str)
 	log.Flush()
 
+	ch := make(chan os.Signal)
+	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+	writePid()
+	go signalHandle(ch)
+
 	err = http.ListenAndServe(":"+*port, nil)
 	if err != nil {
 		fail(ErrorCodeInternalInitError, err.Error())
 	}
+}
+
+func signalHandle(ch chan os.Signal) {
+	for {
+		sig := <-ch
+		log.Debugf("Signal received: %v", sig)
+
+		err := os.Remove(pidFileName)
+		if err != nil {
+			log.Error(err)
+		}
+
+		log.Flush()
+		os.Exit(1)
+	}
+}
+
+func writePid() {
+	pid := os.Getpid()
+
+	file, err := os.Create(pidFileName)
+	if err != nil {
+		panic(log.Error(err))
+	}
+	defer file.Close()
+
+	file.WriteString(fmt.Sprintf("%d", pid))
 }

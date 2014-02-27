@@ -1,7 +1,7 @@
 package contract
 
 // SenderChecker is an interface representing the ability to perform two main functions: sending sms and tracking them.
-// Tracking here means the ability to poll SMSC gateway periodically
+// Tracking here means the ability to poll SMSC gateway periodically.
 //
 // Both gosmsc.HttpSenderChecker and gosmsc/rpcservice/client.Client implement it, so it is easy to
 // use this interface in your app and switch between local service implementation and a remote one.
